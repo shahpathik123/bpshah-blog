@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insights — B P Shah Consultants LLP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --line: rgba(0,0,0,0.16);
+    --ink:#000000;
+    --muted:#4A4A4A;
+    --muted-dim:#8A8A8A;
+    --serif:'Playfair Display', Georgia, serif;
+    --sans:'Inter', -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#ffffff;color:var(--ink);font-family:var(--sans);}
+  .wrap{max-width:840px;margin:0 auto;padding:48px 24px 80px;}
+  .letterhead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:40px;}
+  .mark{font-family:var(--serif);font-size:15px;letter-spacing:0.18em;text-transform:uppercase;}
+  .file-tag{font-size:11px;letter-spacing:0.12em;color:var(--muted-dim);text-transform:uppercase;}
+  h1{font-family:var(--serif);font-size:34px;margin:0 0 8px;}
+  .sub{color:var(--muted);font-size:15px;margin:0 0 40px;}
+  .post-list{display:flex;flex-direction:column;}
+  .post-card{padding:24px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;display:block;}
+  .post-date{font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted-dim);margin-bottom:8px;}
+  .post-title{font-family:var(--serif);font-size:22px;margin:0 0 8px;}
+  .post-excerpt{font-size:14.5px;color:var(--muted);line-height:1.6;margin:0;}
+  .empty{color:var(--muted);font-size:14.5px;padding:24px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="letterhead">
+    <div class="mark">B P Shah Consultants LLP</div>
+    <div class="file-tag">Insights</div>
+  </div>
+  <h1>Insights</h1>
+  <p class="sub">Perspectives on M&amp;A advisory, business valuation, and deal-making from our team.</p>
+  <div class="post-list" id="postList">
+    <div class="empty">Loading articles…</div>
+  </div>
+</div>
+<script>
+fetch('posts.json')
+  .then(function(res){ return res.json(); })
+  .then(function(posts){
+    const list = document.getElementById('postList');
+    if (!posts.length) {
+      list.innerHTML = '<div class="empty">No articles published yet — check back soon.</div>';
+      return;
+    }
+    posts.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+    list.innerHTML = posts.map(function(p){
+      return '<a class="post-card" href="posts/' + p.slug + '.html">' +
+        '<div class="post-date">' + p.date + '</div>' +
+        '<div class="post-title">' + p.title + '</div>' +
+        '<p class="post-excerpt">' + p.excerpt + '</p>' +
+        '</a>';
+    }).join('');
+  })
+  .catch(function(){
+    document.getElementById('postList').innerHTML = '<div class="empty">Could not load articles.</div>';
+  });
+</script>
+</body>
+</html>
