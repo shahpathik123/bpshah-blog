@@ -29,6 +29,9 @@
   .post-title{font-family:var(--serif);font-size:22px;margin:0 0 8px;}
   .post-excerpt{font-size:14.5px;color:var(--muted);line-height:1.6;margin:0;}
   .empty{color:var(--muted);font-size:14.5px;padding:24px 0;}
+  .cta{margin:0 0 40px;padding:28px;border:1px solid var(--line);text-align:center;}
+  .cta p{font-size:14px;color:var(--muted);margin:0 0 16px;}
+  .cta a{display:inline-block;padding:14px 28px;background:#111111;color:#ffffff;text-decoration:none;font-size:13px;letter-spacing:0.05em;text-transform:uppercase;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -39,6 +42,10 @@
   </div>
   <h1>Insights</h1>
   <p class="sub">Perspectives on M&amp;A advisory, business valuation, and deal-making from our team.</p>
+  <div class="cta">
+    <p>Have a business opportunity or requirement of your own?</p>
+    <a href="https://bpshah-dealintake.netlify.app">Submit Requirement Here</a>
+  </div>
   <div class="post-list" id="postList">
     <div class="empty">Loading articles…</div>
   </div>
@@ -52,7 +59,12 @@ fetch('posts.json')
       list.innerHTML = '<div class="empty">No articles published yet — check back soon.</div>';
       return;
     }
-    posts.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+    posts.sort(function(a,b){
+      if (a.publishedAt && b.publishedAt) {
+        return new Date(b.publishedAt) - new Date(a.publishedAt);
+      }
+      return 0;
+    });
     list.innerHTML = posts.map(function(p){
       return '<a class="post-card" href="posts/' + p.slug + '.html">' +
         '<div class="post-date">' + p.date + '</div>' +
